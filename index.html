@@ -3,23 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard Pesan Anonim</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>🕷️ Dashboard Pesan Anonim</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #4a90e2;
-      --primary-dark: #357ABD;
-      --bg: #f4f6f8;
-      --card: #ffffff;
-      --text: #333;
-      --shadow: rgba(0, 0, 0, 0.1);
+      --primary: #ff0040;
+      --primary-dark: #990030;
+      --bg: #0d0d0d;
+      --card: #1a1a1a;
+      --text: #eeeeee;
+      --glow: rgba(255, 0, 64, 0.6);
+      --shadow: 0 0 20px var(--glow), 0 0 60px var(--glow), 0 0 80px var(--primary);
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg);
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #000000, #1c001a);
       margin: 0;
       padding: 20px;
+      color: var(--text);
       max-width: 800px;
       margin-left: auto;
       margin-right: auto;
@@ -27,62 +29,60 @@
 
     h1, h2 {
       text-align: center;
-      color: var(--primary-dark);
+      color: var(--primary);
+      text-shadow: var(--shadow);
     }
 
     .box {
       background: var(--card);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px var(--shadow);
+      border-radius: 16px;
+      box-shadow: inset 0 0 8px #000000, 0 4px 20px rgba(255, 0, 64, 0.3);
       padding: 20px;
       margin: 15px 0;
-      color: var(--text);
-      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.3s;
     }
 
     .box:hover {
-      transform: scale(1.01);
+      transform: scale(1.02);
+      box-shadow: 0 0 20px var(--primary);
     }
 
-    textarea, input {
+    input, textarea {
       width: 100%;
       padding: 12px;
+      background: #111;
+      color: var(--text);
+      border: 1px solid #333;
+      border-radius: 10px;
+      font-family: 'Orbitron', sans-serif;
       margin-top: 10px;
-      font-size: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-family: 'Poppins', sans-serif;
-      transition: border-color 0.2s;
-      box-sizing: border-box;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
 
     input:focus, textarea:focus {
       border-color: var(--primary);
       outline: none;
+      box-shadow: 0 0 10px var(--primary);
     }
 
     button {
       width: 100%;
       padding: 12px;
       margin-top: 10px;
-      font-size: 15px;
-      font-weight: bold;
+      font-size: 16px;
       background: var(--primary);
-      color: white;
+      color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
+      box-shadow: 0 0 12px var(--primary-dark);
+      transition: background 0.3s, box-shadow 0.3s;
     }
 
     button:hover {
       background: var(--primary-dark);
-    }
-
-    .admin-btns button {
-      width: auto;
-      margin: 5px 10px 0 0;
-      padding: 8px 15px;
+      box-shadow: var(--shadow);
     }
 
     #admin-section, #login-form {
@@ -91,56 +91,64 @@
 
     hr {
       border: none;
-      border-top: 2px solid #ddd;
+      border-top: 2px solid #222;
       margin: 30px 0;
     }
 
     .info-text {
       text-align: center;
       font-size: 14px;
-      color: #777;
+      color: #999;
       margin-bottom: 15px;
     }
 
     #replies-container .box {
       white-space: pre-line;
+      background: linear-gradient(145deg, #111, #1c001a);
+    }
+
+    .msg-entry {
+      margin-bottom: 10px;
+    }
+
+    .msg-entry textarea {
+      margin-top: 5px;
+    }
+
+    .admin-btns button {
+      width: auto;
+      margin-right: 10px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Pesan Anonim</h1>
-  <p class="info-text">Kirim pesan tanpa identitas & lihat apakah dibalas!</p>
+  <h1>🕸️ Pesan Anonim</h1>
+  <p class="info-text">Kirim pesan rahasia tanpa identitas & tunggu balasan dari bayangan...</p>
 
   <div class="box">
-    <input type="text" id="username" placeholder="Masukkan Username Anda (contoh: user123)" />
-    <textarea id="user-message" rows="4" placeholder="Tulis pesan di sini..."></textarea>
+    <input type="text" id="username" placeholder="Username Anonim (misal: darkghost123)" />
+    <textarea id="user-message" rows="4" placeholder="Tulis pesan misteriusmu di sini..."></textarea>
     <button id="send-message">Kirim Pesan</button>
-    <button id="load-replies" style="background: #28a745;">Cek Balasan</button>
+    <button id="load-replies" style="background: #28a745;">🔍 Cek Balasan</button>
   </div>
 
   <div id="replies-container"></div>
 
   <hr>
 
-  <h2>ini ksusu admin jangan coba-coba masuk wkwkwk</h2>
-  <button id="show-login">Login Admin</button>
+  <h2>🧠 menu ini khusus admin </h2>
+  <button id="show-login">🔐 Login Admin</button>
 
   <div id="login-form" class="box">
-    <input type="password" id="admin-pin" placeholder="Masukkan PIN Admin (contoh: 1234)" />
+    <input type="password" id="admin-pin" placeholder="(KHUSUS ADMIN LIHAT DAN BALAS PESAN!)" />
     <button id="admin-login">Masuk</button>
   </div>
 
   <div id="admin-section" class="box">
-    <h3>Daftar Pesan Masuk</h3>
+    <h3>📥 Daftar Pesan Masuk</h3>
     <div id="message-list"></div>
-
-    <h4>Balas Pesan</h4>
-    <input type="text" id="reply-username" placeholder="Username" readonly />
-    <textarea id="reply-message" rows="3" placeholder="Tulis balasan..."></textarea>
-    <button id="send-reply">Kirim Balasan</button>
-    <button id="delete-message" style="background:#dc3545;">Hapus Pesan</button>
-    <button id="logout-admin" style="background: #6c757d;">Logout</button>
+    <button id="logout-admin" style="background: #6c757d;">🚪 Logout</button>
   </div>
 
   <script type="module">
@@ -159,112 +167,109 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const messageRef = collection(db, "pesan");
-    let selectedMsgId = null;
+    const ADMIN_PIN = "131222";
 
     document.getElementById('show-login').onclick = () => {
       document.getElementById('login-form').style.display = "block";
       document.getElementById('show-login').style.display = "none";
     };
 
-    async function loadReplies() {
-      const username = document.getElementById('username').value.trim();
-      if (!username) return alert("Masukkan username Anda untuk melihat balasan.");
-      const q = query(messageRef, where("username", "==", username));
-      const querySnapshot = await getDocs(q);
-      const container = document.getElementById('replies-container');
-      container.innerHTML = "";
-      let hasReply = false;
-      querySnapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        if (data.balasan && data.balasan.trim() !== "") {
-          hasReply = true;
-          const el = document.createElement("div");
-          el.className = "box";
-          el.innerText = `Pesan: ${data.pesan}\nBalasan: ${data.balasan}`;
-          container.appendChild(el);
-        }
-      });
-      if (!hasReply) {
-        container.innerHTML = "<div class='box'>Belum ada balasan untuk username ini.</div>";
-      }
-    }
-
-    document.getElementById('send-message').onclick = async () => {
-      const msg = document.getElementById('user-message').value.trim();
-      const username = document.getElementById('username').value.trim();
-      if (!username || !msg) return alert("Username dan pesan harus diisi!");
-      try {
-        await addDoc(messageRef, { username, pesan: msg, balasan: "" });
-        alert("Pesan berhasil dikirim!");
-        document.getElementById('user-message').value = "";
-        loadReplies();
-      } catch (e) {
-        alert("Gagal mengirim pesan: " + e.message);
-      }
-    };
-
-    document.getElementById('load-replies').onclick = loadReplies;
-
-    document.getElementById('admin-login').onclick = async () => {
+    document.getElementById('admin-login').onclick = () => {
       const pin = document.getElementById('admin-pin').value.trim();
-      if (pin === "131222") {
-        document.getElementById('admin-section').style.display = "block";
+      if (pin === ADMIN_PIN) {
         document.getElementById('login-form').style.display = "none";
-        await loadAdminMessages();
+        document.getElementById('admin-section').style.display = "block";
+        loadMessages();
       } else {
-        alert("PIN salah.");
+        alert("PIN salah!");
       }
-    };
-
-    async function loadAdminMessages() {
-      const messageList = document.getElementById('message-list');
-      messageList.innerHTML = "";
-      const querySnapshot = await getDocs(messageRef);
-      querySnapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        const el = document.createElement("div");
-        el.className = "box";
-        el.innerHTML = `
-          <strong>Username:</strong> ${data.username}<br>
-          <strong>Pesan:</strong> ${data.pesan}<br>
-          <strong>Balasan:</strong> ${data.balasan || "-"}<br>
-          <button onclick="selectMessage('${docSnap.id}', '${data.username}', '${data.pesan}')">Balas</button>
-        `;
-        messageList.appendChild(el);
-      });
-    }
-
-    window.selectMessage = (id, username) => {
-      selectedMsgId = id;
-      document.getElementById('reply-username').value = username;
-      document.getElementById('reply-message').value = "";
-    };
-
-    document.getElementById('send-reply').onclick = async () => {
-      const balasan = document.getElementById('reply-message').value.trim();
-      if (!selectedMsgId || !balasan) return alert("Balasan tidak boleh kosong!");
-      const docRef = doc(db, "pesan", selectedMsgId);
-      await updateDoc(docRef, { balasan });
-      alert("Balasan dikirim!");
-      document.getElementById('reply-message').value = "";
-      loadAdminMessages();
-    };
-
-    document.getElementById('delete-message').onclick = async () => {
-      if (!selectedMsgId) return alert("Pilih pesan terlebih dahulu.");
-      const docRef = doc(db, "pesan", selectedMsgId);
-      await deleteDoc(docRef);
-      alert("Pesan dihapus.");
-      selectedMsgId = null;
-      document.getElementById('reply-username').value = "";
-      document.getElementById('reply-message').value = "";
-      loadAdminMessages();
     };
 
     document.getElementById('logout-admin').onclick = () => {
       document.getElementById('admin-section').style.display = "none";
       document.getElementById('show-login').style.display = "block";
-      selectedMsgId = null;
+    };
+
+    document.getElementById('send-message').onclick = async () => {
+      const username = document.getElementById('username').value.trim();
+      const pesan = document.getElementById('user-message').value.trim();
+      if (!username || !pesan) return alert("Lengkapi semua kolom!");
+      try {
+        await addDoc(messageRef, { username, pesan, balasan: "" });
+        alert("Pesan terkirim!");
+        document.getElementById('user-message').value = "";
+      } catch (e) {
+        alert("Gagal mengirim pesan!");
+      }
+    };
+
+    document.getElementById('load-replies').onclick = async () => {
+      const username = document.getElementById('username').value.trim();
+      if (!username) return alert("Masukkan username Anda.");
+      const q = query(messageRef, where("username", "==", username));
+      const querySnapshot = await getDocs(q);
+      const container = document.getElementById('replies-container');
+      container.innerHTML = "";
+      let found = false;
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.balasan && data.balasan.trim() !== "") {
+          found = true;
+          const el = document.createElement("div");
+          el.className = "box";
+          el.innerText = `🕵️ Pesan: ${data.pesan}\n💬 Balasan: ${data.balasan}`;
+          container.appendChild(el);
+        }
+      });
+      if (!found) {
+        container.innerHTML = "<div class='box'>Belum ada balasan untuk username ini.</div>";
+      }
+    };
+
+    async function loadMessages() {
+      const querySnapshot = await getDocs(messageRef);
+      const list = document.getElementById('message-list');
+      list.innerHTML = "";
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const msgEl = document.createElement("div");
+        msgEl.className = "box msg-entry";
+        msgEl.innerHTML = `
+          <b>👤 ${data.username}</b><br>
+          <p>📝 ${data.pesan}</p>
+          <textarea class="reply-input" placeholder="Tulis balasan...">${data.balasan || ""}</textarea>
+          <div class="admin-btns">
+            <button onclick="replyMessage('${docSnap.id}', this)">💌 Balas</button>
+            <button onclick="deleteMessage('${docSnap.id}')" style="background:#dc3545;">🗑️ Hapus</button>
+          </div>
+        `;
+        list.appendChild(msgEl);
+      });
+    }
+
+    window.replyMessage = async (id, btn) => {
+      const box = btn.closest(".box");
+      const replyText = box.querySelector(".reply-input").value.trim();
+      if (!replyText) return alert("Tulis dulu balasannya!");
+      try {
+        await updateDoc(doc(db, "pesan", id), { balasan: replyText });
+        alert("Balasan dikirim!");
+        loadMessages();
+      } catch (e) {
+        alert("Gagal membalas!");
+      }
+    };
+
+    window.deleteMessage = async (id) => {
+      if (confirm("Yakin ingin menghapus pesan ini?")) {
+        try {
+          await deleteDoc(doc(db, "pesan", id));
+          alert("Pesan dihapus!");
+          loadMessages();
+        } catch (e) {
+          alert("Gagal menghapus pesan.");
+        }
+      }
     };
   </script>
 </body>
