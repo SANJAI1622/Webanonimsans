@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Pesan Anonim</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4a90e2;
+      --primary-dark: #357ABD;
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #333;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--primary-dark);
+    }
+
+    .box {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow);
+      padding: 20px;
+      margin: 15px 0;
+      color: var(--text);
+      transition: transform 0.2s ease;
+    }
+
+    .box:hover {
+      transform: scale(1.01);
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: 'Poppins', sans-serif;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    .admin-btns button {
+      width: auto;
+      margin: 5px 10px 0 0;
+      padding: 8px 15px;
+    }
+
+    #admin-section, #login-form {
+      display: none;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid #ddd;
+      margin: 30px 0;
+    }
+
+    .info-text {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 15px;
+    }
+
+    #replies-container .box {
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Pesan Anonim</h1>
+  <p class="info-text">Kirim pesan tanpa identitas & lihat apakah dibalas!</p>
+
+  <div class="box">
+    <input type="text" id="username" placeholder="Masukkan Username Anda (contoh: user123)" />
+    <textarea id="user-message" rows="4" placeholder="Tulis pesan di sini..."></textarea>
+    <button id="send-message">Kirim Pesan</button>
+    <button id="load-replies" style="background: #28a745;">Cek Balasan</button>
+  </div>
+
+  <div id="replies-container"></div>
+
+  <hr>
+
+  <h2>Panel Admin</h2>
+  <button id="show-login">Login Admin</button>
+
+  <div id="login-form" class="box">
+    <input type="password" id="admin-pin" placeholder="Masukkan PIN Admin (contoh: 1234)" />
+    <button id="admin-login">Masuk</button>
+  </div>
+
+  <div id="admin-section" class="box">
+    <h3>Daftar Pesan Masuk</h3>
+    <div id="message-list"></div>
+
+    <h4>Balas Pesan</h4>
+    <input type="text" id="reply-username" placeholder="Username" readonly />
+    <textarea id="reply-message" rows="3" placeholder="Tulis balasan..."></textarea>
+    <button id="send-reply">Kirim Balasan</button>
+    <button id="delete-message" style="background:#dc3545;">Hapus Pesan</button>
+    <button id="logout-admin" style="background: #6c757d;">Logout</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDIzTTYNBUrBDnZQFUzGzuQn0AEQoxvaHg",
+      authDomain: "bostapp.firebaseapp.com",
+      projectId: "bostapp",
+      storageBucket: "bostapp.appspot.com",
+      messagingSenderId: "896774310058",
+      appId: "1:896774310058:web:166e0324a6b46a1b9128d3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const messageRef = collection(db, "pesan");
+    let selectedMsgId = null;
+
+    document.getElementById('show-login').onclick = () => {
+      document.getElementById('login-form').style.display = "block";
+      document.getElementById('show-login').style.display = "none";
+    };
+
+    async function loadReplies() {
+      const username = document.getElementById('username').value.trim();
+      if (!username) return alert("Masukkan username Anda untuk melihat balasan.");
+      const q = query(messageRef, where("username", "==", username));
+      const querySnapshot = await getDocs(q);
+      const container = document.getElementById('replies-container');
+      container.innerHTML = "";
+      let hasReply = false;
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.balasan && data.balasan.trim() !== "") {
+          hasReply = true;
+          const el = document.createElement("div");
+          el.className = "box";
+          el.innerText = `Pesan: ${data.pesan}\nBalasan: ${data.balasan}`;
+          container.appendChild(el);
+        }
+      });
+      if (!hasReply) {
+        container.innerHTML = "<div class='box'>Belum ada balasan untuk username ini.</div>";
+      }
+    }
+
+    document.getElementById('send-message').onclick = async () => {
+      const msg = document.getElementById('user-message').value.trim();
+      const username = document.getElementById('username').value.trim();
+      if (!username || !msg) return alert("Username dan pesan harus diisi!");
+      try {
+        await addDoc(messageRef, { username, pesan: msg, balasan: "" });
+        alert("Pesan berhasil dikirim!");
+        document.getElementById('user-message').value = "";
+        loadReplies();
+      } catch (e) {
+        alert("Gagal mengirim pesan: " + e.message);
+      }
+    };
+
+    document.getElementById('load-replies').onclick = loadReplies;
+
+    document.getElementById('admin-login').onclick = async () => {
+      const pin = document.getElementById('admin-pin').value.trim();
+      if (pin === "1234") {
+        document.getElementById('admin-section').style.display = "block";
+        document.getElementById('login-form').style.display = "none";
+        await loadAdminMessages();
+      } else {
+        alert("PIN salah.");
+      }
+    };
+
+    async function loadAdminMessages() {
+      const messageList = document.getElementById('message-list');
+      messageList.innerHTML = "";
+      const querySnapshot = await getDocs(messageRef);
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const el = document.createElement("div");
+        el.className = "box";
+        el.innerHTML = `
+          <strong>Username:</strong> ${data.username}<br>
+          <strong>Pesan:</strong> ${data.pesan}<br>
+          <strong>Balasan:</strong> ${data.balasan || "-"}<br>
+          <button onclick="selectMessage('${docSnap.id}', '${data.username}', '${data.pesan}')">Balas</button>
+        `;
+        messageList.appendChild(el);
+      });
+    }
+
+    window.selectMessage = (id, username) => {
+      selectedMsgId = id;
+      document.getElementById('reply-username').value = username;
+      document.getElementById('reply-message').value = "";
+    };
+
+    document.getElementById('send-reply').onclick = async () => {
+      const balasan = document.getElementById('reply-message').value.trim();
+      if (!selectedMsgId || !balasan) return alert("Balasan tidak boleh kosong!");
+      const docRef = doc(db, "pesan", selectedMsgId);
+      await updateDoc(docRef, { balasan });
+      alert("Balasan dikirim!");
+      document.getElementById('reply-message').value = "";
+      loadAdminMessages();
+    };
+
+    document.getElementById('delete-message').onclick = async () => {
+      if (!selectedMsgId) return alert("Pilih pesan terlebih dahulu.");
+      const docRef = doc(db, "pesan", selectedMsgId);
+      await deleteDoc(docRef);
+      alert("Pesan dihapus.");
+      selectedMsgId = null;
+      document.getElementById('reply-username').value = "";
+      document.getElementById('reply-message').value = "";
+      loadAdminMessages();
+    };
+
+    document.getElementById('logout-admin').onclick = () => {
+      document.getElementById('admin-section').style.display = "none";
+      document.getElementById('show-login').style.display = "block";
+      selectedMsgId = null;
+    };
+  </script>
+</body>
+</html>
